@@ -1,3 +1,94 @@
+# Changes in 1.2.0
+
+## New conventions
+
+* [extension-id](conventions/extension-id.md): introduce some rules about extension ID naming.
+
+## Stabilize extensions
+
+* `CLAP_EXT_AMBISONIC`
+* `CLAP_EXT_AUDIO_PORTS_ACTIVATION`
+* `CLAP_EXT_CONFIGURABLE_AUDIO_PORTS`
+* `CLAP_EXT_CONTEXT_MENU`
+* `CLAP_EXT_PARAM_INDICATION`
+* `CLAP_EXT_PRESET_LOAD`
+* `CLAP_EXT_REMOTE_CONTROLS`
+* `CLAP_EXT_STATE_CONTEXT`
+* `CLAP_EXT_SURROUND`
+* `CLAP_EXT_TRACK_INFO`
+
+### Notes regarding extension ID change after draft stabilization
+
+We changed the extension ID in the process of stabilization which leads to a **break**.
+
+To mitigate this transition, we've provided compatibility extension IDs which can be used to match and use the latest draft extensions as they are 100% compatible.
+
+For example, `CLAP_EXT_CONTEXT_MENU` for the stable ID and `CLAP_EXT_CONTEXT_MENU_COMPAT` for the draft ID.
+
+As you can see in [extension-id](conventions/extension-id.md), we introduced some rules, so this kind of break won't happen again.
+
+We may decide to remove the `*_COMPAT` IDs in the future once their usage becomes antiquated.
+
+## Removed draft extensions
+
+* `CLAP_EXT_CHECK_FOR_UPDATE` wasn't used and it's design needed more thought.
+* `CLAP_EXT_MIDI_MAPPING` wasn't used. MIDI2 seems to do it better, and the interface wasn't satisfying.
+* `CLAP_EXT_CV` the interface wasn't satisfying.
+
+## Stabilize factory
+
+* `CLAP_PRESET_DISCOVERY_FACTORY_ID`
+
+Note: we kept the last draft factory ID in order to not break plugins already using it.
+
+## Plugin State Converter
+
+* Introduction of a new factory which provides a plugin state convertion mechanism.
+
+## Refactoring
+
+* `clap_plugin_id_t` was renamed to `clap_universal_plugin_id_t` to make it clear that it can describe more than just a CLAP plugin ID.
+* `clap_timestamp_t` was renamed to `clap_timestamp` to be consistent with other types, like e.g. `clap_id`. Also it was moved to a separate header as `CLAP_PRESET_DISCOVERY_FACTORY_ID` was stabilized.
+
+## Documentation
+
+* [events.h](include/clap/events.h): Clarify how "Port Channel Key NoteID" matching works
+* [events.h](include/clap/events.h): Clarify how `clap_event_note` fields map to MIDI, Host, etc...
+* [events.h](include/clap/events.h): Expand clap note expression documentation
+* [plugin.h](include/clap/plugin.h): Style cleanup
+* [params.h](include/clap/ext/params.h): Fix incorrect function name reference
+* [latency.h](include/clap/ext/latency.h): Require the plugin to be activated to get the latency and clarify that the latency can only be fetched when the plugin is activated
+
+## Plugin Template
+
+* [plugin-template.c](src/plugin-template.c): implement thread-safe plugin entry init counter
+
+## Organization
+
+* `clap.h` no longer includes headers from `ext/draft` or `factory/draft`. Draft extension and factory headers must now be explicitly included, either individually or via the `all.h` header.
+
+## Other changes
+
+* [voice-info.h](include/clap/ext/voice-info.h): Make the voice info id `CLAP_CONSTEXPR` like all other ids
+* [preset-load.h](include/clap/ext/preset-load.h): Make the preset load id and compat id `CLAP_CONSTEXPR` like all other ids
+
+# Changes in 1.1.10
+
+* [params.h](include/clap/ext/params.h): add `CLAP_PARAM_IS_ENUM` flag.
+* various documentation improvements:
+  * clarification on the return value of many functions
+  * typos
+
+# Changes in 1.1.9
+
+* [entry.h](include/clap/entry.h): clarify what the `plugin_path` is on macOS
+* [surround.h](include/clap/ext/draft/surround.h): simplify the design
+* [ambisonic.h](include/clap/ext/draft/ambisonic.h): simplify the design
+* [configurable-audio-ports.h](include/clap/ext/draft/configurable-audio-ports.h): simplify the design
+* [gui.h](include/clap/ext/gui.h): documentation clarifications
+* [entry.h](include/clap/entry.h): documentation clarifications
+* [audio-ports-activation.h](include/clap/ext/draft/audio-ports-activation.h): specify the sample size to be used when activating the audio port.
+
 # Changes in 1.1.8
 
 * [params.h](include/clap/ext/params.h): document how persisting parameter values between sessions should be implemented
@@ -126,7 +217,7 @@
   it is now **required** to deactivate the plugin before destroying it.
 * [params.h](include/clap/ext/params.h): improve documentation for `clap_host_params->request_flush()`.
 * [entry.h](include/clap/entry.h): improve documentation regarding `init()`, `deinit()` and CLAP search path.
-* [gui.h](inclued/clap/gui.h): fix typo `clap_gui_resize_hints.preserve_aspect_ratio`
+* [gui.h](include/clap/gui.h): fix typo `clap_gui_resize_hints.preserve_aspect_ratio`
 * [plugin-template](src/plugin-template.c): missing impl of plugin destroy.
 * various documentation improvements
 

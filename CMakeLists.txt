@@ -50,6 +50,7 @@ add_custom_target(clap-tests)
 
 if (${CLAP_BUILD_TESTS})
     message(STATUS "Including CLAP tests, compile tests, and versions")
+    include(CheckIncludeFile)
 
     macro(clap_compile_cpp SUFFIX EXT STDC STDCPP)
         add_executable(clap-compile-${SUFFIX} EXCLUDE_FROM_ALL src/main.${EXT})
@@ -59,6 +60,10 @@ if (${CLAP_BUILD_TESTS})
             CXX_STANDARD ${STDCPP})
         add_test(NAME test-clap-compile-${SUFFIX} COMMAND clap-compile-${SUFFIX})
         add_dependencies(clap-tests clap-compile-${SUFFIX})
+
+        if (${EXT} STREQUAL "cc")
+            target_compile_definitions(clap-compile-${SUFFIX} PRIVATE CLAP_COMPILE_TEST_CXX_VERSION=${STDCPP})
+        endif()
 
         if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
             target_compile_options(clap-compile-${SUFFIX} PRIVATE -Wall -Wextra -pedantic)
@@ -80,10 +85,16 @@ if (${CLAP_BUILD_TESTS})
     clap_compile_cpp(cpp17 cc 17 17)
     clap_compile_cpp(cpp20 cc 17 20)
 
+    check_include_file(threads.h CLAP_HAS_THREADS_H)
+
     add_library(clap-plugin-template MODULE EXCLUDE_FROM_ALL src/plugin-template.c)
     target_link_libraries(clap-plugin-template PRIVATE clap)
     set_target_properties(clap-plugin-template PROPERTIES C_STANDARD 11)
     add_dependencies(clap-tests clap-plugin-template)
+
+    if(CLAP_HAS_THREADS_H)
+        target_compile_definitions(clap-plugin-template PRIVATE CLAP_HAS_THREADS_H)
+    endif()
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         target_link_libraries(clap-plugin-template PRIVATE -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/linux-my_plug.version)

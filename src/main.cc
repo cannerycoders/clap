@@ -1,4 +1,4 @@
-#include <clap/clap.h>
+#include <clap/all.h>
 
 // The purpose of this file is to check that all headers compile
 
@@ -46,6 +46,18 @@
 #endif
 #if CLAP_VERSION_LT(CLAP_VERSION_MAJOR, CLAP_VERSION_MINOR, CLAP_VERSION_REVISION - 1)
 #error CLAP_VERSION_LT is inconsistent (REVISION)
+#endif
+
+#if (CLAP_COMPILE_TEST_CXX_VERSION >= 11) && ! defined(CLAP_HAS_CXX11)
+#error CLAP_HAS_CXX11 is not defined correctly
+#endif
+
+#if (CLAP_COMPILE_TEST_CXX_VERSION >= 17) && ! defined(CLAP_HAS_CXX17)
+#error CLAP_HAS_CXX17 is not defined correctly
+#endif
+
+#if (CLAP_COMPILE_TEST_CXX_VERSION >= 20) && ! defined(CLAP_HAS_CXX20)
+#error CLAP_HAS_CXX20 is not defined correctly
 #endif
 
 static const CLAP_CONSTEXPR clap_version m = CLAP_VERSION;

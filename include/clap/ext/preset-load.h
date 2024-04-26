@@ -1,8 +1,12 @@
 #pragma once
 
-#include "../../plugin.h"
+#include "../plugin.h"
 
-static const char CLAP_EXT_PRESET_LOAD[] = "clap.preset-load.draft/2";
+static CLAP_CONSTEXPR const char CLAP_EXT_PRESET_LOAD[] = "clap.preset-load/2";
+
+// The latest draft is 100% compatible.
+// This compat ID may be removed in 2026.
+static CLAP_CONSTEXPR const char CLAP_EXT_PRESET_LOAD_COMPAT[] = "clap.preset-load.draft/2";
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,7 +15,7 @@ extern "C" {
 typedef struct clap_plugin_preset_load {
    // Loads a preset in the plugin native preset file format from a location.
    // The preset discovery provider defines the location and load_key to be passed to this function.
-   //
+   // Returns true on success.
    // [main-thread]
    bool(CLAP_ABI *from_location)(const clap_plugin_t *plugin,
                                  uint32_t             location_kind,
