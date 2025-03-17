@@ -145,11 +145,14 @@ and use to get a basic plugin experience:
 - [MIP2](https://github.com/skei/MIP2), host and plugins
 - [Avendish](https://github.com/celtera/avendish), a reflection-based API for media plug-ins in C++ which supports Clap
 - [NIH-plug](https://github.com/robbert-vdh/nih-plug), an API-agnostic, Rust-based plugin framework aiming to reduce boilerplate without getting in your way
+- [iPlug2](https://iplug2.github.io), a liberally licensed C++ audio plug-in framework that supports Clap
 
 ## Programming Language Bindings
 
 - [clap-sys](https://github.com/glowcoil/clap-sys), rust binding
 - [CLAP-for-Delphi](https://github.com/Bremmers/CLAP-for-Delphi), Delphi binding
+- [clap-zig-bindings](https://sr.ht/~interpunct/clap-zig-bindings/), Zig bindings
+- [CLAP for Ada](https://github.com/ficorax/cfa), Ada 2012 binding
 
 ## Artwork
 
